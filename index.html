@@ -4,9 +4,82 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Stronghold Finder</title>
+    <link href="./style/output.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @font-face { font-family: Anek; src: url('./res/fonts/Anek.ttf'); } 
+      h1 {
+         font-family: Anek
+      }
+    </style>
   </head>
-  <body>
-    <h1>Hello, world!</h1>
+    <body class="bg-cover bg-center" style="background-image: url(../res/img/bg.png)"></div>
+
+      <div class="flex flex-col w-full justify-center items-center">
+        <h1 class="text-center align-text-bottom text-white text-5xl font-black w-1/2 drop-shadow-xl z-10 mb-4 mt-40">
+          Find the nearest <span class="bg-gradient-to-r from-cyan-400 to-blue-700 bg-clip-text text-transparent">stronghold</span> with just 2 Eyes of Ender
+        </h1>
+      
+        <div class="w-6/12 h-[500px] bg-zinc-900 rounded-md border border-zinc-600 border-dashed drop-shadow-xl">
+          <form class="flex w-full h-full justify-center" method="post" action="">
+            <div class="mt-4 ml-4 m-auto w-full h-full flex flex-col">
+              
+              <!-- PAGINA 1-->
+
+              <div class="form-page items-center m-auto mt-10" id="page1">
+                <h1 class="text-white mb-4 text-3xl font-bold">Ready to find it?</h1>
+
+        
+                <button type="button" class="bg-gradient-to-r from-emerald-500 to-emerald-900 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" onclick="nextPage(2)">
+                  Yes, I am!
+                </button>
+              </div>
+
+              <div class="form-page hidden" id="page2">
+                <h2 class="text-white text-lg mb-4">Pagina 2</h2>
+                <label class="block text-white mb-2" for="campo2">Campo 2:</label>
+                <input class="px-3 py-2 rounded-md bg-zinc-800 text-white border border-zinc-600 mb-4 w-full" id="campo2" type="text" placeholder="Inserisci il valore">
+        
+                <label class="block text-white mb-2" for="select2">Selettore 2:</label>
+                <select class="px-3 py-2 rounded-md bg-zinc-800 text-white border border-zinc-600 mb-4 w-full" id="select2">
+                  <option value="">Opzione 1</option>
+                  <option value="">Opzione 2</option>
+                  <option value="">Opzione 3</option>
+                </select>
+        
+                <div class="flex justify-between w-full">
+                  <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="previousPage(1)">
+                    Indietro
+                  </button>
+                  <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Invia
+                  </button>
+                </div>
+            </div>
+          </form>
+
+          
+        </div>
+      </div>
+
+      
+
   </body>
+
+  <script>
+    function nextPage(pageNumber) {
+      const currentPage = document.querySelector('.form-page:not(.hidden)');
+      const nextPage = document.getElementById(`page${pageNumber}`);
+      currentPage.classList.add('hidden');
+      nextPage.classList.remove('hidden');
+    }
+  
+    function previousPage(pageNumber) {
+      const currentPage = document.querySelector('.form-page:not(.hidden)');
+      const previousPage = document.getElementById(`page${pageNumber}`);
+      currentPage.classList.add('hidden');
+      previousPage.classList.remove('hidden');
+    }
+  </script>
+  
 </html>
