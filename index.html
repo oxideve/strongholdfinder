@@ -1,85 +1,301 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Stronghold Finder</title>
-    <link href="./style/output.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3da3148845.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-      @font-face { font-family: Anek; src: url('./res/fonts/Anek.ttf'); } 
-      h1 {
-         font-family: Anek
-      }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        #secondPage,
+        #resultPage {
+            display: none;
+        }
+
+        #helpPopup {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: 250px;
+            z-index: 1000;
+        }
+
+        input {
+            color: black;
+        }
+
+        .copy-button {
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+
+        .copy-button:hover {
+            background-color: #555;
+        }
     </style>
-  </head>
-    <body class="bg-cover bg-center" style="background-image: url(https://i.ibb.co/7QKCtgL/aaabstract.png)"></div>
+    <script>
+        function drawChart(originalX, originalZ, newX, newZ, finalX, finalZ) {
+            const ctx = document.getElementById('resultChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Coordinates',
+                        data: [
+                            { x: originalX, y: originalZ, label: 'Original' },
+                            { x: newX, y: newZ, label: 'New' },
+                            { x: finalX, y: finalZ, label: 'Final' }
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }, {
+                        label: 'Lines',
+                        data: [
+                            { x: originalX, y: originalZ },
+                            { x: newX, y: newZ },
+                            { x: finalX, y: finalZ }
+                        ],
+                        type: 'line',
+                        borderColor: 'rgba(0, 0, 0, 0.5)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'X Coordinate'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Z Coordinate'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        annotation: {
+                            annotations: [{
+                                type: 'line',
+                                xMin: originalX,
+                                xMax: newX,
+                                yMin: originalZ,
+                                yMax: newZ,
+                                borderColor: 'rgba(255, 99, 132, 0.5)',
+                                borderWidth: 2,
+                                label: {
+                                    content: 'Angle 1',
+                                    enabled: true,
+                                    position: 'top'
+                                }
+                            }, {
+                                type: 'line',
+                                xMin: newX,
+                                xMax: finalX,
+                                yMin: newZ,
+                                yMax: finalZ,
+                                borderColor: 'rgba(54, 162, 235, 0.5)',
+                                borderWidth: 2,
+                                label: {
+                                    content: 'Angle 2',
+                                    enabled: true,
+                                    position: 'top'
+                                }
+                            }]
+                        }
+                    }
+                }
+            });
+        }
 
-      <div class="flex flex-col w-full justify-center items-center">
-        <h1 class="text-center align-text-bottom text-white text-5xl font-black w-1/2 drop-shadow-xl z-10 mb-4 mt-40">
-          Find the nearest <span class="bg-gradient-to-r from-cyan-400 to-blue-700 bg-clip-text text-transparent">stronghold</span> with just 2 Eyes of Ender
-        </h1>
-      
-        <div class="w-6/12 h-[500px] bg-zinc-900 rounded-md border border-zinc-600 border-dashed drop-shadow-xl">
-          <form class="flex w-full h-full justify-center" method="post" action="">
-            <div class="mt-4 ml-4 m-auto w-full h-full flex flex-col">
-              
-              <!-- PAGINA 1-->
+        function showSecondPage() {
+            document.getElementById('firstPage').style.display = 'none';
+            document.getElementById('secondPage').style.display = 'block';
 
-              <div class="form-page items-center m-auto mt-10" id="page1">
-                <h1 class="text-white mb-4 text-3xl font-bold">Ready to find it?</h1>
+            const newX = document.getElementById('newX').value;
+            const newZ = document.getElementById('newZ').value;
 
-        
-                <button type="button" class="bg-gradient-to-r from-emerald-500 to-emerald-900 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" onclick="nextPage(2)">
-                  Yes, I am!
-                </button>
-              </div>
+            document.getElementById('generatedX').textContent = newX;
+            document.getElementById('generatedZ').textContent = newZ;
 
-              <div class="form-page hidden" id="page2">
-                <h2 class="text-white text-lg mb-4">Pagina 2</h2>
-                <label class="block text-white mb-2" for="campo2">Campo 2:</label>
-                <input class="px-3 py-2 rounded-md bg-zinc-800 text-white border border-zinc-600 mb-4 w-full" id="campo2" type="text" placeholder="Inserisci il valore">
-        
-                <label class="block text-white mb-2" for="select2">Selettore 2:</label>
-                <select class="px-3 py-2 rounded-md bg-zinc-800 text-white border border-zinc-600 mb-4 w-full" id="select2">
-                  <option value="">Opzione 1</option>
-                  <option value="">Opzione 2</option>
-                  <option value="">Opzione 3</option>
-                </select>
-        
-                <div class="flex justify-between w-full">
-                  <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="previousPage(1)">
-                    Indietro
-                  </button>
-                  <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Invia
-                  </button>
+            const tpCommand = "/tp @a " + newX + " ~ " + newZ;
+            document.getElementById('tpCommandDisplay').textContent = tpCommand;
+        }
+
+        function showResultPage() {
+            const newX = parseFloat(document.getElementById('newX').value);
+            const newZ = parseFloat(document.getElementById('newZ').value);
+            const secondAngle = parseFloat(document.getElementById('secondAngle').value);
+            const angleDifference = parseFloat(document.getElementById('angleDifference').value);
+
+            let adjustedAngle = secondAngle > 0 ? secondAngle : 360 - Math.abs(secondAngle);
+            const adjustedAngle90 = adjustedAngle + 90;
+            const radians = adjustedAngle90 * (Math.PI / 180);
+            const radiansDiff = angleDifference * (Math.PI / 180);
+
+            const finalX = newX + ((17.5 / Math.sin(radiansDiff)) * Math.cos(radians));
+            const finalZ = newZ + ((17.5 / Math.sin(radiansDiff)) * Math.sin(radians));
+
+            document.getElementById('finalXDisplay').textContent = finalX.toFixed(2);
+            document.getElementById('finalZDisplay').textContent = finalZ.toFixed(2);
+
+            const finalTpCommand = "/tp @a " + finalX.toFixed(2) + " ~ " + finalZ.toFixed(2);
+            document.getElementById('finalTpCommandDisplay').textContent = finalTpCommand;
+
+            document.getElementById('resultPage').style.display = 'block';
+            document.getElementById('secondPage').style.display = 'none';
+
+            // Aggiungi i dati al grafico
+            drawChart(
+                parseFloat(document.getElementById('x').value),
+                parseFloat(document.getElementById('z').value),
+                newX,
+                newZ,
+                finalX,
+                finalZ
+            );
+        }
+
+        function calcolaNuoveCoordinate() {
+            const x = parseFloat(document.getElementById('x').value);
+            const z = parseFloat(document.getElementById('z').value);
+            const angle = parseFloat(document.getElementById('angle').value);
+
+            let adjustedAngle = angle > 0 ? angle : 360 - Math.abs(angle);
+            const radians = adjustedAngle * (Math.PI / 180);
+            const newX = x + (17.5 * Math.cos(radians));
+            const newZ = z + (17.5 * Math.sin(radians));
+
+            document.getElementById('newX').value = newX.toFixed(2);
+            document.getElementById('newZ').value = newZ.toFixed(2);
+
+            showSecondPage();
+        }
+
+        function toggleHelpPopup() {
+            const popup = document.getElementById('helpPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied to clipboard!");
+            }, (err) => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+    </script>
+</head>
+
+<body class="min-h-screen flex justify-center items-center bg-[url('/res/bg.svg')] bg-neutral-900 bg-cover bg-no-repeat">
+
+    <!-- Prima pagina -->
+    <div id="firstPage" class="relative w-full max-w-md bg-neutral-800 border border-dashed text-white p-9 rounded-lg shadow-xl">
+        <h2 class="text-2xl font-bold mb-4 text-center"><b>Insert the coordinates of the block you're standing on.</b></h2>
+        <form onsubmit="calcolaNuoveCoordinate(); return false;" class="space-y-4">
+            <div>
+                <label for="x" class="block font-medium text-center">X Coordinates:</label>
+                <input type="number" step="0.01" name="x" id="x" required class="w-full p-2 border border-gray-300 rounded text-black">
+            </div>
+
+            <div>
+                <label for="z" class="block font-medium text-center">Z Coordinates:</label>
+                <input type="number" step="0.01" name="z" id="z" required class="w-full p-2 border border-gray-300 rounded text-black">
+            </div>
+            <h2 class="text-2xl font-bold mb-4 text-center"><b>Now throw an Eye of Ender and insert the angle</b></h2>
+            <div class="relative">
+                <label for="angle" class="block font-medium text-center">Angle of launch (in degrees)
+                    <a href="#" onclick="toggleHelpPopup();" class="text-blue-400 underline mr-1"><i class="fa-solid fa-circle-info underline text-white"></i></a>:
+                </label>
+                <input type="number" step="0.01" name="angle" id="angle" required class="w-full p-2 border border-gray-300 rounded text-black">
+
+                <div id="helpPopup" class="absolute right-0 top-full mt-2">
+                    <img src="res/help1.png" />
+                    <p class="mt-2">The angle of launch could be found by opening the F3 menu, near the "facing" label.</p>
                 </div>
             </div>
-          </form>
 
-          
+            <input type="submit" value="Avanti" class="w-full px-4 py-2 bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded cursor-pointer">
+        </form>
+    </div>
+
+    <!-- Seconda pagina -->
+    <div id="secondPage" class="relative w-full max-w-md bg-neutral-800 border border-dashed text-white p-9 rounded-lg shadow-xl">
+        <h2 class="text-2xl font-bold mb-4 text-center"><b>Now move to these coordinates:</b></h2>
+        <form onsubmit="showResultPage(); return false;" class="space-y-4">
+            <input type="hidden" id="newX">
+            <input type="hidden" id="newZ">
+            <div>
+                <p class="text-lg text-center">Generated X Coordinate: <span id="generatedX" class="font-bold"></span></p>
+                <p class="text-lg text-center">Generated Z Coordinate: <span id="generatedZ" class="font-bold"></span></p>
+                <p class="text-lg text-center">TP Command: <span id="tpCommandDisplay" class="font-bold"></span>
+                    <button type="button" class="copy-button" onclick="copyToClipboard(document.getElementById('tpCommandDisplay').textContent)">Copy</button>
+                </p>
+            </div>
+            <h2 class="text-2xl font-bold mb-4 text-center"><b>Now throw another Eye of Ender</b></h2>
+            <div>
+                <label for="secondAngle" class="block font-medium text-center">Angle of the second launch (in degrees):</label>
+                <input type="number" step="0.01" name="secondAngle" id="secondAngle" required class="w-full p-2 border border-gray-300 rounded text-black">
+            </div>
+
+            <div>
+                <label for="angleDifference" class="block font-medium text-center">Difference between the angles (in degrees | this angle - previous angle):</label>
+                <input type="number" step="0.01" name="angleDifference" id="angleDifference" required class="w-full p-2 border border-gray-300 rounded text-black">
+            </div>
+
+            <input type="submit" value="Calcola" class="w-full px-4 py-2 bg-gradient-to-r from-blue-800 to-indigo-900 text-white rounded cursor-pointer">
+        </form>
+    </div>
+
+    <!-- Pagina dei risultati -->
+    <div id="resultPage" class="relative w-full max-w-md bg-neutral-800 border border-dashed text-white p-9 rounded-lg shadow-xl">
+        <h2 class="text-2xl font-bold mb-4 text-center"><b>Result</b></h2>
+        <div class="space-y-4">
+            <p class="text-lg">APPR. X Coordinate of the Stronghold: <span id="finalXDisplay" class="font-bold"></span></p>
+            <p class="text-lg">APPR. Z Coordinate of the Stronghold: <span id="finalZDisplay" class="font-bold"></span></p>
+            <p class="text-lg">TP Command: <span id="finalTpCommandDisplay" class="font-bold"></span>
+                <button type="button" class="copy-button" onclick="copyToClipboard(document.getElementById('finalTpCommandDisplay').textContent)">Copy</button>
+            </p>
+            <canvas id="resultChart" width="400" height="400"></canvas> <!-- Aggiungi il canvas per il grafico -->
+            <p class="text-center text-gray-400 text-sm mt-4">*Note: All results are approximate.</p>
+            <p class="text-center text-gray-400 text-sm mt-4">Refresh the page to start over!</p>
         </div>
-      </div>
+    </div>
 
-      
-
-  </body>
-
-  <script>
-    function nextPage(pageNumber) {
-      const currentPage = document.querySelector('.form-page:not(.hidden)');
-      const nextPage = document.getElementById(`page${pageNumber}`);
-      currentPage.classList.add('hidden');
-      nextPage.classList.remove('hidden');
-    }
-  
-    function previousPage(pageNumber) {
-      const currentPage = document.querySelector('.form-page:not(.hidden)');
-      const previousPage = document.getElementById(`page${pageNumber}`);
-      currentPage.classList.add('hidden');
-      previousPage.classList.remove('hidden');
-    }
-  </script>
+</body>
 
 </html>
