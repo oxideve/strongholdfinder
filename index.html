@@ -162,7 +162,8 @@
             const newX = parseFloat(document.getElementById('newX').value);
             const newZ = parseFloat(document.getElementById('newZ').value);
             const secondAngle = parseFloat(document.getElementById('secondAngle').value);
-            const angleDifference = parseFloat(document.getElementById('angleDifference').value);
+            const angle = parseFloat(document.getElementById('angle').value);
+            const angleDifference = secondAngle - angle;
 
             let adjustedAngle = secondAngle > 0 ? secondAngle : 360 - Math.abs(secondAngle);
             const adjustedAngle90 = adjustedAngle + 90;
@@ -279,10 +280,7 @@
                 <input type="number" step="0.01" name="secondAngle" id="secondAngle" required class="w-full h-[25px] p-2 border border-gray-300 rounded text-black">
             </div>
 
-            <div>
-                <label for="angleDifference" class="block font-medium">Difference between the angles (in degrees | this angle - previous angle):</label>
-                <input type="number" step="0.01" name="angleDifference" id="angleDifference" required class="w-full h-[25px] p-2 border border-gray-300 rounded text-black">
-            </div>
+
 
             <input type="submit" value="Calculate ->" class="w-full px-4 py-2 bg-zinc-800 text-white rounded cursor-pointer">
         </form>
