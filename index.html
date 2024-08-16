@@ -8,13 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3da3148845.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://alwingulla.com/88/tag.min.js" data-zone="89302" async data-cfasync="false"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-    <meta name="google-adsense-account" content="ca-pub-5485409326639379">
+    <link rel="apple-touch-icon" sizes="180x180" href="res/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="res/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="res/favicon/favicon-16x16.png">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
+    />
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -23,6 +27,13 @@
         #secondPage,
         #resultPage {
             display: none;
+        }
+
+        .bg-double {
+            background-image: url('res/grid.svg'), url('res/bg.svg');
+            background-position: center, center;
+            background-size: cover, contain;
+            background-repeat: no-repeat, no-repeat;
         }
 
         #helpPopup {
@@ -53,8 +64,15 @@
         .copy-button:hover {
             background-color: #555;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
     <script>
+
+        
+
         function drawChart(originalX, originalZ, newX, newZ, finalX, finalZ) {
             const ctx = document.getElementById('resultChart').getContext('2d');
             new Chart(ctx, {
@@ -146,6 +164,7 @@
                     }
                 }
             });
+
         }
 
         function showSecondPage() {
@@ -225,86 +244,184 @@
                 console.error("Failed to copy text: ", err);
             });
         }
+
     </script>
 </head>
 
-<body class="min-h-screen flex justify-center items-center">
-    <div class="absolute top-20 left-0 w-full text-3xl text-center translate-y-0 font-bold drop-shadow-xl">
-        Find the Stronghold with just 2 Eyes of Ender
+<body class="flex bg-cover bg-no-repeat min-h-screen flex justify-center items-center bg-double bg-neutral-900">
+
+    
+    
+    <div class="absolute h-full align-top">
+        <img src="res/logo.png" class="block mx-auto mt-[50px] w-[1000px] drop-shadow-xl" />
+    
+        <div data-translatable class="mt-[30px] text-3xl text-center font-bold drop-shadow-xl text-white">
+            Find the Stronghold with just 2 Eyes of Ender // Trova lo Stronghold con solo 2 Ender Eyes 
+        </div>
     </div>
 
+    <div class="absolute h-screen w-screen flex justify-end items-end p-4">
+        <div class="relative text-black">
+            <button id="dropdownButton" class=" bg-white border text-black font-medium rounded-md text-sm px-4 py-2.5 text-center inline-flex items-center">
+                <i data-translatable class="bi bi-globe2"></i>&nbsp;Select Language
+                <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="black">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7l3-3 3 3m0 6l-3 3-3-3"/>
+                </svg>
+            </button> 
+    
+            <div id="dropdownMenu" class="hidden absolute right-0 z-10 w-44 mb-2 bg-white rounded-lg shadow-lg bottom-full">
+                <ul class="py-2 text-sm text-gray-700">
+                    <li>
+                        <a href="#" onclick="lanSel('en')" class="block px-4 py-2 hover:bg-gray-100"><span class="fi fi-gb"></span> English</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="lanSel('it')" class="block px-4 py-2 hover:bg-gray-100"><span class="fi fi-it"></span> Italiano</a>
+                    </li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        dropdownButton.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        // Close the dropdown if clicked outside
+        window.addEventListener('click', (e) => {
+            if (!dropdownButton.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    </script>
+
     <!-- Prima pagina -->
-    <div id="firstPage" class="relative w-full max-w-md border text-black p-6 rounded-lg shadow-xl">
-        <h2 class="text-xl font-bold mb-4 r"><b>Insert the coordinates of the block you're standing on.</b></h2>
+    <div data id="firstPage" class="relative w-full bg-white max-w-md border text-black p-6 rounded-lg shadow-xl">
+        <h2 class="text-xl font-bold mb-4 r"><b data-translatable>Insert the coordinates of the block you're standing on // Inserisci le coordinate del blocco sul quale ti trovi adesso</b></h2>
         <form onsubmit="calcolaNuoveCoordinate(); return false;" class="space-y-4">
             <div>
-                <label for="x" class="block font-medium">X Coordinates:</label>
+                <label data-translatable for="x" class="block font-medium">X Coordinates: // Coordinate X:</label>
                 <input type="number" step="0.01" name="x" id="x" required class="w-full h-[25px] p-2 border border-gray-300 rounded text-black">
             </div>
 
             <div>
-                <label for="z" class="block font-medium">Z Coordinates:</label>
+                <label data-translatable for="z" class="block font-medium">Z Coordinates: // Coordinate Z:</label>
                 <input type="number" step="0.01" name="z" id="z" required class="w-full h-[25px] p-2 border border-gray-300 rounded text-black">
             </div>
-            <h2 class="font-bold mb-4"><b>Now throw an Eye of Ender and insert the angle</b></h2>
+            <h2  class="font-bold mb-4"><b data-translatable>Now throw an Eye of Ender and insert the angle // Adesso lancia un Ender Eye ed inserisci l'angolo di lancio</b></h2>
             <div class="relative">
-                <label for="angle" class="block font-medium">Angle of launch (in degrees)
-                    <a href="#" onclick="toggleHelpPopup();" class="text-blue-400 underline mr-1"><i class="fa-solid fa-circle-info underline text-black"></i></a>:
-                </label>
+                <div class="flex items-center">
+                    <label data-translatable for="angle" class="block font-medium" id="angleLabel">
+                        Angle of launch (in degrees) : // Angolo di lancio (in gradi):
+                    </label>
+                    <a href="#" onclick="toggleHelpPopup();" class="text-blue-400 underline ml-2">
+                        <i class="fa-solid fa-circle-info underline text-black"></i>
+                    </a>
+                </div>
                 <input type="number" step="0.01" name="angle" id="angle" required class="w-full h-[25px] p-2 border border-gray-300 rounded text-black">
-
-                <div id="helpPopup" class="absolute right-0 top-full mt-2">
+            
+                <div id="helpPopup" class="absolute right-0 top-full mt-2 hidden bg-white p-4 border border-gray-300 rounded shadow-lg">
                     <img src="res/help1.png" />
-                    <p class="mt-2">The angle of launch could be found by opening the F3 menu, near the "facing" label.</p>
+                    <p class="mt-2" data-translatable>The angle of launch could be found by opening the F3 menu, near the "facing" label. // L'angolo di lancio può essere trovato aprendo il menu di debug con F3. La voce si trova accanto al testo "facing".</p>
                 </div>
             </div>
 
             <div>
-
-            <input type="submit" value="Next ->" class="w-full px-4 py-2 bg-zinc-800 text-white rounded cursor-pointer"></div>
+            <input data-translatable type="submit" id="nextBtn" value="Next ->" class="w-full px-4 py-2 bg-zinc-800 text-white rounded cursor-pointer"></div>
         </form>
     </div>
 
     <!-- Seconda pagina -->
-    <div id="secondPage" class="relative w-full max-w-md border text-black p-6 rounded-lg shadow-xl">
-        <h2 class="text-xl font-bold mb-4"><b>Now move to these coordinates:</b></h2>
+    <div id="secondPage" class="relative bg-white w-full max-w-md border text-black p-6 rounded-lg shadow-xl">
+        <h2  class="text-xl font-bold mb-4"><b data-translatable>Now move to these coordinates: // Adesso spostati a queste coordinate: </b></h2>
         <form onsubmit="showResultPage(); return false;" class="space-y-4">
             <input type="hidden" id="newX">
             <input type="hidden" id="newZ">
             <div>
-                <p class="">Generated X Coordinate: <span id="generatedX" class="font-bold"></span></p>
-                <p class="">Generated Z Coordinate: <span id="generatedZ" class="font-bold"></span></p>
-                <p class="">TP Command: <span id="tpCommandDisplay" class="font-bold"></span>
-                    <button type="button" class="copy-button" onclick="copyToClipboard(document.getElementById('tpCommandDisplay').textContent)">Copy</button>
+                <p class="">X: <span id="generatedX" class="font-bold"></span></p>
+                <p class="">Z: <span id="generatedZ" class="font-bold"></span></p>
+                <p class="">TP: <span id="tpCommandDisplay" class="font-bold"></span>
+                    <button type="button" class="copyButton" onclick="copyToClipboard(document.getElementById('tpCommandDisplay').textContent)">Copy</button>
                 </p>
             </div>
-            <h2 class="text-xl font-bold mb-4"><b>Then, throw another Eye of Ender</b></h2>
+            <h2 class="text-xl font-bold mb-4"><b data-translatable>Then, throw another Eye of Ender and insert the angle // Dopo, lancia un altro Ender Eye ed inserisci l'angolo</b></h2>
             <div>
-                <label for="secondAngle" class="block font-medium">Angle of the second launch (in degrees):</label>
+                <label data-translatable for="secondAngle" class="block font-medium">Angle of the second launch (in degrees): // Angolo del secondo lancio (in gradi): </label>
                 <input type="number" step="0.01" name="secondAngle" id="secondAngle" required class="w-full h-[25px] p-2 border border-gray-300 rounded text-black">
             </div>
 
 
 
-            <input type="submit" value="Calculate ->" class="w-full px-4 py-2 bg-zinc-800 text-white rounded cursor-pointer">
+            <input type="submit" id="calculateButton" value="Calculate ->" class="w-full px-4 py-2 bg-zinc-800 text-white rounded cursor-pointer">
         </form>
     </div>
 
     <!-- Pagina dei risultati -->
-    <div id="resultPage" class="relative w-full max-w-md border text-black p-6 rounded-lg shadow-xl">
-        <h2 class="text-xl font-bold MB-4"><b>Estimated location of the Stronghold</b></h2>
+    <div id="resultPage" class="relative w-full max-w-md bg-white border text-black p-6 rounded-lg shadow-xl">
+        <h2 class="text-xl font-bold MB-4"><b data-translatable>Estimated location of the Stronghold // Posizione approssimativa dello Stronghold</b></h2>
         <div class="space">
-            <p class="">X: <span id="finalXDisplay" class="font-bold"></span></p>
+            <p class="mt-2">X: <span id="finalXDisplay" class="font-bold"></span></p>
             <p class="">Z: <span id="finalZDisplay" class="font-bold"></span></p>
-            <p class="">TP Command: <span id="finalTpCommandDisplay" class="font-bold"></span>
+            <p class="">TP: <span id="finalTpCommandDisplay" class="font-bold"></span>
                 <button type="button" class="copy-button" onclick="copyToClipboard(document.getElementById('finalTpCommandDisplay').textContent)">Copy</button>
             </p>
-            <canvas id="resultChart" width="200" height="200"></canvas> <!-- Aggiungi il canvas per il grafico -->
-            <p class="text-center text-gray-400 text-sm mt-4">*Note: All results are approximate.</p>
-            <p class="text-center text-gray-400 text-sm mt-4">Refresh the page to start over!</p>
+            <p class="text-center text-gray-400 text-sm mt-4" data-translatable>*Note: All results are approximate, verify them! // *NB: I risultati sono approssimativi, verificali!</p>
+            <p class="text-center text-gray-400 text-sm mt-4" data-translatable>Refresh the page to start over! // Aggiorna la pagina per iniziare nuovamente!</p>
         </div>
     </div>
 
 </body>
+
+<script src="res/scripts/dom-i18n.min.js"></script>
+<script>
+    // Crea una singola istanza di domI18n all'avvio
+    const i18n = domI18n({
+        selector: '[data-translatable]',
+        separator: ' // ',
+        languages: ['en', 'it'], // Lingue disponibili
+        defaultLanguage: localStorage.getItem('selectedLanguage') || 'en', // Imposta la lingua predefinita
+    });
+
+    function lanSel(language) {
+        // Cambia la lingua usando l'istanza esistente
+        i18n.changeLanguage(language);
+
+        // Salva la lingua selezionata nel localStorage
+        localStorage.setItem('selectedLanguage', language);
+
+        // Feedback visivo con bandiera
+        const dropdownButton = document.getElementById('dropdownButton');
+
+        const calculateButton = document.getElementById('calculateButton').value;
+
+        if (language === 'en') {
+            document.getElementById('calculateButton').value = 'Calculate ->'
+            document.getElementById('nextBtn').value = 'Next ->'
+            dropdownButton.innerHTML = '<i class="bi bi-globe2"></i>&nbsp;Change Language: &nbsp;<span class="fi fi-gb"></span>';
+            
+        } else if (language === 'it') {
+            document.getElementById('calculateButton').value = 'Calcola ->'
+
+            document.getElementById('nextBtn').value = 'Avanti ->'
+            dropdownButton.innerHTML = '<i class="bi bi-globe2"></i>&nbsp;Cambia lingua:&nbsp;<span class="fi fi-it"></span>';
+        }
+
+        console.log("lan chg to: " + language);
+    }
+
+    // Imposta la lingua salvata al caricamento della pagina
+    window.addEventListener('load', () => {
+        const savedLanguage = localStorage.getItem('selectedLanguage');
+        if (savedLanguage) {
+            lanSel(savedLanguage);
+        }
+    });
+</script>
+
+
 
 </html>
