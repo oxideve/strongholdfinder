@@ -71,102 +71,6 @@
     </style>
     <script>
 
-        
-
-        function drawChart(originalX, originalZ, newX, newZ, finalX, finalZ) {
-            const ctx = document.getElementById('resultChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Coordinates',
-                        data: [
-                            { x: originalX, y: originalZ, label: 'Original' },
-                            { x: newX, y: newZ, label: 'New' },
-                            { x: finalX, y: finalZ, label: 'Final' }
-                        ],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(75, 192, 192, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(75, 192, 192, 1)'
-                        ],
-                        borderWidth: 1
-                    }, {
-                        label: 'Lines',
-                        data: [
-                            { x: originalX, y: originalZ },
-                            { x: newX, y: newZ },
-                            { x: finalX, y: finalZ }
-                        ],
-                        type: 'line',
-                        borderColor: 'rgba(0, 0, 0, 0.5)',
-                        borderWidth: 2,
-                        fill: false,
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'X Coordinate'
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Z Coordinate'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        annotation: {
-                            annotations: [{
-                                type: 'line',
-                                xMin: originalX,
-                                xMax: newX,
-                                yMin: originalZ,
-                                yMax: newZ,
-                                borderColor: 'rgba(255, 99, 132, 0.5)',
-                                borderWidth: 2,
-                                label: {
-                                    content: 'Angle 1',
-                                    enabled: true,
-                                    position: 'top'
-                                }
-                            }, {
-                                type: 'line',
-                                xMin: newX,
-                                xMax: finalX,
-                                yMin: newZ,
-                                yMax: finalZ,
-                                borderColor: 'rgba(54, 162, 235, 0.5)',
-                                borderWidth: 2,
-                                label: {
-                                    content: 'Angle 2',
-                                    enabled: true,
-                                    position: 'top'
-                                }
-                            }]
-                        }
-                    }
-                }
-            });
-
-        }
-
         function showSecondPage() {
             document.getElementById('firstPage').style.display = 'none';
             document.getElementById('secondPage').style.display = 'block';
@@ -206,14 +110,7 @@
             document.getElementById('secondPage').style.display = 'none';
 
             // Aggiungi i dati al grafico
-            drawChart(
-                parseFloat(document.getElementById('x').value),
-                parseFloat(document.getElementById('z').value),
-                newX,
-                newZ,
-                finalX,
-                finalZ
-            );
+
         }
 
         function calcolaNuoveCoordinate() {
@@ -345,7 +242,7 @@
                 <p class="">X: <span id="generatedX" class="font-bold"></span></p>
                 <p class="">Z: <span id="generatedZ" class="font-bold"></span></p>
                 <p class="">TP: <span id="tpCommandDisplay" class="font-bold"></span>
-                    <button type="button" class="copyButton" onclick="copyToClipboard(document.getElementById('tpCommandDisplay').textContent)">Copy</button>
+                    <button type="button" class="copy-button" onclick="copyToClipboard(document.getElementById('tpCommandDisplay').textContent)">Copy</button>
                 </p>
             </div>
             <h2 class="text-xl font-bold mb-4"><b data-translatable>Then, throw another Eye of Ender and insert the angle // Dopo, lancia un altro Ender Eye ed inserisci l'angolo</b></h2>
@@ -364,7 +261,7 @@
     <div id="resultPage" class="relative w-full max-w-md bg-white border text-black p-6 rounded-lg shadow-xl">
         <h2 class="text-xl font-bold MB-4"><b data-translatable>Estimated location of the Stronghold // Posizione approssimativa dello Stronghold</b></h2>
         <div class="space">
-            <p class="mt-2">X: <span id="finalXDisplay" class="font-bold"></span></p>
+            <p class="">X: <span id="finalXDisplay" class="font-bold"></span></p>
             <p class="">Z: <span id="finalZDisplay" class="font-bold"></span></p>
             <p class="">TP: <span id="finalTpCommandDisplay" class="font-bold"></span>
                 <button type="button" class="copy-button" onclick="copyToClipboard(document.getElementById('finalTpCommandDisplay').textContent)">Copy</button>
@@ -405,7 +302,6 @@
             
         } else if (language === 'it') {
             document.getElementById('calculateButton').value = 'Calcola ->'
-
             document.getElementById('nextBtn').value = 'Avanti ->'
             dropdownButton.innerHTML = '<i class="bi bi-globe2"></i>&nbsp;Cambia lingua:&nbsp;<span class="fi fi-it"></span>';
         }
