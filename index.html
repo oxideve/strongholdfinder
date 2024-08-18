@@ -109,7 +109,7 @@
             document.getElementById('resultPage').style.display = 'block';
             document.getElementById('secondPage').style.display = 'none';
 
-            // Aggiungi i dati al grafico
+            
 
         }
 
@@ -196,7 +196,6 @@
         });
     </script>
 
-    <!-- Prima pagina -->
     <div data id="firstPage" class="relative w-full bg-white max-w-md border text-black p-6 rounded-lg shadow-xl">
         <h2 class="text-xl font-bold mb-4 r"><b data-translatable>Insert the coordinates of the block you're standing on // Inserisci le coordinate del blocco sul quale ti trovi adesso</b></h2>
         <form onsubmit="calcolaNuoveCoordinate(); return false;" class="space-y-4">
@@ -232,7 +231,6 @@
         </form>
     </div>
 
-    <!-- Seconda pagina -->
     <div id="secondPage" class="relative bg-white w-full max-w-md border text-black p-6 rounded-lg shadow-xl">
         <h2  class="text-xl font-bold mb-4"><b data-translatable>Now move to these coordinates: // Adesso spostati a queste coordinate: </b></h2>
         <form onsubmit="showResultPage(); return false;" class="space-y-4">
@@ -257,7 +255,6 @@
         </form>
     </div>
 
-    <!-- Pagina dei risultati -->
     <div id="resultPage" class="relative w-full max-w-md bg-white border text-black p-6 rounded-lg shadow-xl">
         <h2 class="text-xl font-bold MB-4"><b data-translatable>Estimated location of the Stronghold // Posizione approssimativa dello Stronghold</b></h2>
         <div class="space">
@@ -275,7 +272,6 @@
 
 <script src="res/scripts/dom-i18n.min.js"></script>
 <script>
-    // Crea una singola istanza di domI18n all'avvio
     const i18n = domI18n({
         selector: '[data-translatable]',
         separator: ' // ',
@@ -284,13 +280,9 @@
     });
 
     function lanSel(language) {
-        // Cambia la lingua usando l'istanza esistente
         i18n.changeLanguage(language);
-
-        // Salva la lingua selezionata nel localStorage
         localStorage.setItem('selectedLanguage', language);
 
-        // Feedback visivo con bandiera
         const dropdownButton = document.getElementById('dropdownButton');
 
         const calculateButton = document.getElementById('calculateButton').value;
@@ -308,8 +300,7 @@
 
         console.log("lan chg to: " + language);
     }
-
-    // Imposta la lingua salvata al caricamento della pagina
+    
     window.addEventListener('load', () => {
         const savedLanguage = localStorage.getItem('selectedLanguage');
         if (savedLanguage) {
